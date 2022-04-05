@@ -1,0 +1,24 @@
+{
+  "name": "@pengmeng/utils",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "scripts": {
+    "clean": "rimraf lib es",
+    "prebuild": "yarn run clean",
+    "build:esm": "tsc -p tsconfig.es.json",
+    "build:lib": "tsc -p tsconfig.lib.json",
+    "build": "yarn build:esm && yarn run build:lib"
+  },
+  "directories": {
+    "es": "es",
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "es",
+    "lib"
+  ]
+}
