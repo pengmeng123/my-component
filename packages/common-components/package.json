@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@pengmeng/fe-utils": "^1.0.0",
@@ -17,6 +19,11 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@storybook/addon-actions": "^6.4.20",
+    "@storybook/addon-essentials": "^6.4.20",
+    "@storybook/addon-links": "^6.4.20",
+    "@storybook/vue3": "^6.4.20",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
@@ -31,6 +38,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
     "babel-jest": "^27.0.6",
+    "babel-loader": "^8.2.4",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -40,7 +48,8 @@
     "less-loader": "^8.0.0",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.4",
-    "typescript": "~4.5.5"
+    "typescript": "~4.5.5",
+    "vue-loader": "^16.8.3"
   },
   "eslintConfig": {
     "root": true,
