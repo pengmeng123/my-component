@@ -16,12 +16,6 @@ export default defineComponent({
       required: true,
     },
   },
-  methods: {
-    aa() {
-      console.log('123--')
-      return 12
-    },
-  },
   setup(props, { expose }) {
     const count = ref(1)
     const obj = reactive({
@@ -66,5 +60,11 @@ export default defineComponent({
         </div>
       </div>
     )
+  },
+  methods: {
+    aa() {
+      console.log('123--')
+      return 12
+    },
   },
 })

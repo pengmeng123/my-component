@@ -1,4 +1,5 @@
 import { defineComponent, PropType } from 'vue'
+import { Select } from 'ant-design-vue'
 
 export default defineComponent({
   props: {
@@ -18,7 +19,7 @@ export default defineComponent({
     return () => (
       <div>
         sss
-        <a-select
+        <Select
           options={options}
           placeholder="请选择"
           style={{
