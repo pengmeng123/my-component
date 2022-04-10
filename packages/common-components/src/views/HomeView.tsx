@@ -1,7 +1,7 @@
 import { defineComponent, ref, provide } from 'vue'
-import HelloWorld from '@/components/HelloWorld'
+import HelloWorld from '@/components-next/HelloWorld'
 import {columnType} from '@pengmeng/fe-utils'
-import Select from '@/components/Select'
+import Select from '@/components-next/Select'
 const items = [
   {
     label: '小米',

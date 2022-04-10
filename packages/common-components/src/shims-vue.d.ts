@@ -4,3 +4,12 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module '*.less?module' {
+  const styles: Record<string, string>
+  export = styles
+}
+declare module '*.less' {
+  const styles: Record<string, string>
+  export = styles
+}

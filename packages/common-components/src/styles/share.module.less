@@ -1,0 +1,70 @@
+@import './vars.less';
+
+.menuWithCheckIcon {
+  .menuItem > :first-child {
+    padding-right: 30px;
+  }
+  :global {
+    .anticon-check {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .menuItem:not(.menuItemChecked) :global(.anticon-check) {
+    display: none;
+  }
+}
+
+.menuItem {
+  color: #666;
+  position: relative;
+  line-height: 24px;
+  font-size: 14px;
+  padding: 0;
+  user-select: none;
+  & > :first-child {
+    display: block;
+    padding: 8px 10px;
+  }
+  :global(.anticon-caret-right) {
+    position: absolute;
+    right: 5px;
+    top: 14px;
+    font-size: 12px;
+    color: inherit;
+    transform: scale(0.8);
+  }
+  :global(.ant-checkbox-wrapper) {
+    color: inherit;
+    display: block;
+  }
+  :global(.ant-checkbox-wrapper:hover .ant-checkbox-inner) {
+    border-color: #d9d9d9;
+  }
+  &.menuItemActive,
+  &.menuItemChecked {
+    color: @primary-color;
+    background-color: #e6f7ff;
+  }
+
+  &.menuItemDisabled {
+    color: #bbb;
+    cursor: not-allowed;
+    &:hover {
+      background-color: #fff;
+    }
+  }
+}
+
+.menuItemWithChildren {
+  & > :first-child {
+    padding-right: 18px;
+  }
+}
+
+.menuItemPath {
+  background-color: #f3f9fd;
+}
