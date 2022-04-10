@@ -15,16 +15,15 @@ const options = [
 export default defineComponent({
   data() {
     return {
-      value: undefined,
+      value: [],
     }
   },
   methods: {
     onChange(value) {
-      console.log('8----', value)
       this.value = value
     },
   },
   render() {
-    return <Select value={this.value} options={options} onChange={this.onChange} />
+    return <Select type="multiple" value={this.value} options={options} onChange={this.onChange} />
   },
 })

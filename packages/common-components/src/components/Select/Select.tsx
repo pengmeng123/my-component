@@ -21,17 +21,26 @@ export default defineComponent({
     },
     value: {},
   },
-  setup(props, { emit }) {
-    const onChange = (value) => {
-      emit('change', value)
-    }
-    return () => (
+  methods: {
+    onChange(value) {
+      this.$emit('change', value)
+    },
+  },
+  render() {
+    return (
       <Dropdown
         trigger={['click']}
-        getPopupContainer={props.getPopupContainer}
-        disabled={props.disabled}
+        getPopupContainer={this.getPopupContainer}
+        disabled={this.disabled}
         v-slots={{
-          overlay: () => <Menu {...props} onChange={onChange} />,
+          overlay: () => (
+            <Menu
+              value={this.value}
+              type={this.type}
+              options={this.options}
+              onChange={this.onChange}
+            />
+          ),
         }}
       >
         <a class="ant-dropdown-link">Hover me, Click menu item</a>

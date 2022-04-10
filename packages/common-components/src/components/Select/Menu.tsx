@@ -1,10 +1,12 @@
 import { defineComponent, PropType, toRefs } from 'vue'
-import { Menu } from 'ant-design-vue'
+import { Menu, Checkbox } from 'ant-design-vue'
 import { IOptions, IType } from '../interface/options'
 import { SINGLE, MULTIPLE } from '../config/common'
 import _ from 'lodash'
 import styles from './Select.module.less'
 import shareStyles from '../../styles/share.module.less'
+import { convertLegacyProps } from 'ant-design-vue/lib/button/buttonTypes'
+const stopPropagation = (e) => e.stopPropagation()
 
 export default defineComponent({
   props: {
@@ -18,32 +20,9 @@ export default defineComponent({
     },
     value: {},
   },
-  setup(props, { emit }) {
-    const renderLabel = (option, index) => {
-      let node
-      let checked = false
-      switch (props.type) {
-        case SINGLE: {
-          if (!_.isNil(props.value) && _.isObject(props.value)) {
-            checked = _.isEqual(option.value, props.value)
-          } else {
-            checked = option.value === props.value
-          }
-          node = <div>{option.label}</div>
-          break
-        }
-        case MULTIPLE: {
-          break
-        }
-        default: {
-          break
-        }
-      }
-      node.$_checked = checked
-      return node
-    }
-    const renderItem = (option, index) => {
-      const label = renderLabel(option, index)
+  methods: {
+    renderItem(option, index) {
+      const label = this.renderLabel(option, index)
       return (
         <Menu.Item
           key={index}
@@ -55,38 +34,93 @@ export default defineComponent({
           {label}
         </Menu.Item>
       )
-    }
-    const callChange = (value) => {
-      if (_.isNil(value)) {
-        emit('change', undefined)
-        return
-      }
-      let fieldValue = props.value
-      switch (props.type) {
+    },
+    renderLabel(option, index) {
+      let node
+      let checked = false
+      switch (this.type) {
         case SINGLE: {
-          if (props.value && _.isEqual(props.value, value)) {
+          if (!_.isNil(this.value) && _.isObject(this.value)) {
+            checked = _.isEqual(option.value, this.value)
+          } else {
+            checked = option.value === this.value
+          }
+          node = <div>{option.label}</div>
+          break
+        }
+        case MULTIPLE: {
+          checked = _.some(this.value || [], (v) => _.isEqual(v, option.value))
+          node = (
+            <Checkbox
+              checked={checked}
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+              }}
+            >
+              {option.label}
+            </Checkbox>
+          )
+          break
+        }
+        default: {
+          break
+        }
+      }
+      node.$_checked = checked
+      return node
+    },
+    callChange(value) {
+      let fieldValue
+      switch (this.type) {
+        case SINGLE: {
+          if (_.isNil(value)) {
+            this.$emit('change', undefined)
+            return
+          }
+          if (this.value && _.isEqual(this.value, value)) {
             return
           }
           fieldValue = value
           break
         }
+        case MULTIPLE: {
+          fieldValue = this.value
+          if (_.isNil(value)) {
+            return
+          }
+          if (!fieldValue || !Array.isArray(fieldValue)) {
+            fieldValue = [value]
+          } else {
+            const index = _.findIndex(fieldValue, (v) => _.isEqual(v, value))
+            if (index === -1) {
+              fieldValue = fieldValue.concat(value)
+            } else {
+              fieldValue = fieldValue.slice()
+              fieldValue.splice(index, 1)
+            }
+          }
+          break
+        }
         default:
           break
       }
-      emit('change', fieldValue)
-    }
-    const handleMenuClick = ({ key }) => {
+      this.$emit('change', fieldValue)
+    },
+    handleMenuClick({ key }) {
       if (key === -1) {
         return
       }
-      const option = props.options[key]
+      const option = this.options[key]
       if (option) {
-        callChange(option.value)
+        this.callChange(option.value)
       }
-    }
-    return () => (
-      <Menu class={{ [styles.menu]: true }} slot="overlay" onClick={handleMenuClick}>
-        {props.options?.map((option, index) => renderItem(option, index))}
+    },
+  },
+  render() {
+    return (
+      <Menu class={{ [styles.menu]: true }} onClick={this.handleMenuClick}>
+        {this.options?.map((option, index) => this.renderItem(option, index))}
       </Menu>
     )
   },
