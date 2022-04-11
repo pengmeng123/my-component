@@ -1,0 +1,61 @@
+.trigger {
+  position: relative;
+  cursor: pointer;
+  height: 32px;
+  line-height: 1.5;
+  display: inline-block;
+  color: #666;
+  width: 178px;
+  &.triggerAutoResize {
+    width: auto;
+  }
+  :global {
+    .anticon {
+      transition: transform 0.3s;
+    }
+    .ant-input {
+      color: #666;
+      &:hover {
+        color: #128bed;
+      }
+    }
+  }
+  &Expanded {
+    .label :global {
+      .anticon {
+        transform: translateY(-50%) rotate(180deg);
+      }
+    }
+  }
+}
+
+.label {
+  padding-right: 32px;
+  display: flex;
+  align-items: center;
+  :global {
+    .anticon {
+      font-size: 12px;
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.clearBtn {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.arrow {
+  color: #666;
+}
+.placeholder {
+  color: #bfbfbf;
+}

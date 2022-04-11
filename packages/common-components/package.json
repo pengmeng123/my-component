@@ -11,6 +11,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
     "@babel/core": "^7.17.9",
     "@pengmeng/fe-utils": "^1.0.0",
     "@storybook/builder-webpack5": "^6.4.20",
