@@ -1,0 +1,26 @@
+.numberRange {
+  &Row {
+    display: flex;
+    & + & {
+      margin-top: 10px;
+    }
+    & > * {
+      display: flex;
+      align-items: center;
+    }
+    span {
+      flex: none;
+      &:first-child {
+        padding-right: 8px;
+      }
+      &:last-child {
+        padding-left: 8px;
+      }
+    }
+    :global {
+      .ant-input-number {
+        flex: 1;
+      }
+    }
+  }
+}

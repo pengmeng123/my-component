@@ -5,7 +5,6 @@ import { SINGLE, MULTIPLE } from '../config/common'
 import _ from 'lodash'
 import styles from './Select.module.less'
 import shareStyles from '../../styles/share.module.less'
-import { convertLegacyProps } from 'ant-design-vue/lib/button/buttonTypes'
 const stopPropagation = (e) => e.stopPropagation()
 
 export default defineComponent({
@@ -49,7 +48,7 @@ export default defineComponent({
           break
         }
         case MULTIPLE: {
-          checked = _.some(this.value || [], (v) => _.isEqual(v, option.value))
+          checked = _.some((this.value || []) as any, (v) => _.isEqual(v, option.value))
           node = (
             <Checkbox
               checked={checked}
@@ -121,6 +120,7 @@ export default defineComponent({
     return (
       <Menu class={{ [styles.menu]: true }} onClick={this.handleMenuClick}>
         {this.options?.map((option, index) => this.renderItem(option, index))}
+        {this.$slots?.default && this.$slots?.default()}
       </Menu>
     )
   },

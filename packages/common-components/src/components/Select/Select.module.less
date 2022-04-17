@@ -2,3 +2,36 @@
   max-height: 300px;
   overflow: auto;
 }
+.groupItemCustomizeOverlay {
+  z-index: 1050;
+  padding-left: 0;
+  padding-right: 0;
+  :global {
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner-content {
+      padding: 0;
+    }
+    .ant-calendar-range {
+      box-shadow: none;
+      border: none;
+    }
+  }
+}
+
+.groupNumberRange {
+  padding: 12px;
+  &Btns {
+    margin-top: 10px;
+    text-align: right;
+    :global {
+      .ant-btn {
+        padding: 0;
+        & + .ant-btn {
+          margin-left: 6px;
+        }
+      }
+    }
+  }
+}

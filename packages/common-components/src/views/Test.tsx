@@ -24,6 +24,14 @@ export default defineComponent({
     },
   },
   render() {
-    return <Select type="multiple" value={this.value} options={options} onChange={this.onChange} />
+    return (
+      <Select
+        type="multiple"
+        value={this.value}
+        options={options}
+        customize="number-range"
+        onChange={this.onChange}
+      />
+    )
   },
 })

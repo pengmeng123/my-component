@@ -46,7 +46,6 @@ export default defineComponent({
       this.$emit('clear')
     },
     handleMouseenter() {
-      console.log('enter---')
       this.hovering = true
     },
     handleMouseLeave() {

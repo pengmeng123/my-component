@@ -1,11 +1,15 @@
 import { defineComponent, PropType, toRefs } from 'vue'
-import { Dropdown } from 'ant-design-vue'
-import Menu from './Menu'
+import { Dropdown, Menu, Popover, InputNumber, Select } from 'ant-design-vue'
+import MenuComponent from './Menu'
 import SelectTrigger from '../SelectTrigger'
+import CustomizeDateRange from './CustomizeDateRange'
+import CustomizeNumberRange from './CustomNumberRange'
 import { IOptions, IType } from '../interface/options'
 import styles from './Select.module.less'
+import shareStyles from '../../styles/share.module.less'
 import { MULTIPLE, SINGLE } from '../config/common'
-import _ from 'lodash'
+import { defaultParser } from '@pengmeng/fe-utils/lib/parser'
+import _, { isEqual } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -17,18 +21,46 @@ export default defineComponent({
     },
     options: {
       type: Array as PropType<IOptions[]>,
+      required: true,
     },
     type: {
       type: String as PropType<IType>,
       default: 'single',
     },
-    value: {},
+    value: {
+      type: [String, Number, Object, Array] as PropType<any | Array<any>>,
+    },
     showValueLabel: {
       type: Boolean,
+    },
+    customize: {
+      type: String,
+    },
+    customizeProps: {
+      type: Object,
+    },
+    parser: {
+      type: Object,
+      default: () => defaultParser,
+    },
+  },
+  data() {
+    return {
+      visible: false,
+      customizeValue: undefined,
+      customizeVisible: false,
+    }
+  },
+  computed: {
+    isMultiple() {
+      return this.type === 'multiple'
     },
   },
   methods: {
     onChange(value) {
+      if (!this.isMultiple) {
+        this.visible = false
+      }
       this.$emit('change', value)
     },
     renderLabel() {
@@ -46,13 +78,95 @@ export default defineComponent({
         referenceLabel = `已选择 ${count}项`
         if (this.showValueLabel) {
           referenceLabel = options
-            ?.filter((o) => _.findIndex(value, (sv) => _.isEqual(o.value, sv) !== -1))
+            .filter((o) => {
+              return _.findIndex(value, (sv) => isEqual(o.value, sv)) !== -1
+            })
             .map((o) => o.label)
             .join('/')
         }
       }
-      return <SelectTrigger placeholder="请选择" label={referenceLabel} />
-      // return <a class="ant-dropdown-link">Hover me, Click menu item</a>
+      return (
+        <SelectTrigger
+          placeholder="请选择"
+          label={referenceLabel}
+          onClear={() => {
+            this.onChange(undefined)
+          }}
+        />
+      )
+    },
+    onVisibleChange(v) {
+      this.visible = v
+    },
+    handleCustomizeReset() {
+      this.customizeValue = undefined
+    },
+    handleCustomizeChange() {
+      console.log('customizeValue111----', this.customizeValue)
+      // const parse = _.get(this.parser, `${this.customize}.toSource`)
+      // if (parse) {
+      //   const v = parse(this.customizeValue)
+      //   console.log(v)
+      //   if (_.isNil(v)) {
+      //     console.log('isnil-----')
+      //   } else {
+      //     this.onChange(v)
+      //   }
+      // }
+      // console.log('submit', parse)
+    },
+    renderCustomize() {
+      let node
+      let popoverProps = {}
+      const data = {
+        value: this.customizeValue,
+        onChange: (value) => {
+          console.log('value----', value)
+          this.customizeValue = value
+        },
+        onReset: this.handleCustomizeReset,
+        onSubmit: this.handleCustomizeChange,
+      }
+      switch (this.customize) {
+        case 'date-range':
+          node = <CustomizeDateRange />
+          popoverProps = {
+            placement: 'rightTop',
+            align: {
+              offset: [20, 0],
+            },
+          }
+          break
+        case 'number-range':
+          node = <CustomizeNumberRange {...data} />
+          popoverProps = {
+            placement: 'rightBottom',
+            align: {
+              offset: [20, 10],
+            },
+          }
+          break
+        default:
+          return null
+      }
+      return (
+        <Menu.Item
+          class={{
+            [shareStyles.menuItem]: true,
+            [shareStyles.menuItemWithChildren]: true,
+            [shareStyles.menuItemChecked]: false,
+          }}
+        >
+          <Popover
+            trigger={['hover']}
+            overlayClassName={styles.groupItemCustomizeOverlay}
+            v-slots={{ content: () => node }}
+            {...popoverProps}
+          >
+            <div>123</div>
+          </Popover>
+        </Menu.Item>
+      )
     },
   },
   render() {
@@ -61,14 +175,18 @@ export default defineComponent({
         trigger={['click']}
         getPopupContainer={this.getPopupContainer}
         disabled={this.disabled}
+        visible={this.visible}
+        onVisibleChange={this.onVisibleChange}
         v-slots={{
           overlay: () => (
-            <Menu
+            <MenuComponent
               value={this.value}
               type={this.type}
               options={this.options}
               onChange={this.onChange}
-            />
+            >
+              {this.renderCustomize()}
+            </MenuComponent>
           ),
         }}
       >
